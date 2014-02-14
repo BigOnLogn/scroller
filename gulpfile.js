@@ -8,8 +8,8 @@ var gulp = require('gulp')
   , server = lr();
 
 var paths = {
-  scripts: ['bower_components/**/*.js', 'public/js/app.js', 'public/js/libs/pixi/bin/pixi.dev.js']
-  ,styles: ['bower_components/**/*.js', 'public/css/**/*.css']
+  scripts: ['libs/pixi/bin/pixi.dev.js', 'public/js/app.js']
+  ,styles: ['libs/**/*.css', 'public/css/**/*.css']
   ,assets: ['public/assets/*']
   ,main: ['public/index.html']
   ,server: ['./server.js']
