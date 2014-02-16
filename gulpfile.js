@@ -3,12 +3,12 @@ var gulp = require('gulp')
   , concat = require('gulp-concat')
   , uglify = require('gulp-uglify')
   , clean = require('gulp-clean')
-  , livereload = require('gulp-livereload')
+  , refresh = require('gulp-livereload')
   , lr = require('tiny-lr')
   , server = lr();
 
 var paths = {
-  scripts: ['libs/pixi/bin/pixi.dev.js', 'public/js/app.js']
+  scripts: ['libs/pixi/bin/pixi.dev.js', 'libs/requirejs/require.js', 'public/js/*.js']
   ,styles: ['libs/**/*.css', 'public/css/**/*.css']
   ,assets: ['public/assets/*']
   ,main: ['public/index.html']
@@ -27,19 +27,19 @@ gulp.task('server', ['scripts', 'styles', 'assets', 'main'], function() {
 gulp.task('main', function() {
   return gulp.src(paths.main)
     .pipe(gulp.dest('dist/public'))
-    .pipe(livereload(server));
+    .pipe(refresh(server));
 });
 
 gulp.task('scripts', function() {
   return gulp.src(paths.scripts)
     .pipe(gulp.dest('dist/public/js'))
-    .pipe(livereload(server));
+    .pipe(refresh(server));
 });
 
 gulp.task('styles', function() {
   return gulp.src(paths.styles)
     .pipe(gulp.dest('dist/public/css'))
-    .pipe(livereload(server));
+    .pipe(refresh(server));
 });
 
 gulp.task('assets', function() {

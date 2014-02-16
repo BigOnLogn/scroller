@@ -1,3 +1,5 @@
-function init() {
-  console.log('init() called');
-}
+require(['main'], function(Main) {
+  var main = new Main();
+
+  main.begin();
+});
