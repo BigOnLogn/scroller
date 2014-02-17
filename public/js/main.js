@@ -1,10 +1,9 @@
 define([
   'pixi.dev'
   , 'scroller'
-  , 'wallspritespool'
 ],
 
-function(PIXI, Scroller, WallSpritesPool) {
+function(PIXI, Scroller) {
 
   function Main() {
     this.stage = new PIXI.Stage(0x66FF99);
@@ -14,17 +13,23 @@ function(PIXI, Scroller, WallSpritesPool) {
       ,document.getElementById('game-canvas')
     );
 
-    this.scroller = new Scroller(this.stage);
+    this.scrollSpeed = Main.MIN_SCROLL_SPEED;
   }
 
-  Main.SCROLL_SPEED = 2;
+  Main.MIN_SCROLL_SPEED = 2;
+  Main.MAX_SCROLL_SPEED = 30;
+  Main.SCROLL_ACCELERATION = 0.05;
 
   Main.prototype.begin = function() {
     this.loadSpriteSheet();
   };
 
   Main.prototype.update = function() {
-    this.scroller.moveViewportXBy(Main.SCROLL_SPEED);
+    this.scroller.moveViewportXBy(this.scrollSpeed);
+    this.scrollSpeed += Main.SCROLL_ACCELERATION;
+    if (this.scrollSpeed > Main.MAX_SCROLL_SPEED) {
+      this.scrollSpeed = Main.MAX_SCROLL_SPEED;
+    }
     this.renderer.render(this.stage);
     requestAnimFrame(this.update.bind(this));
   };

@@ -1,4 +1,19 @@
-define(['pixi.dev', 'far', 'mid'], function(PIXI, Far, Mid) {
+define(
+[
+  'pixi.dev'
+  , 'far'
+  , 'mid'
+  , 'walls'
+  , 'mapbuilder'
+],
+
+function(
+  PIXI
+  , Far
+  , Mid
+  , Walls
+  , MapBuilder
+) {
 
   function Scroller(stage) {
     this.far = new Far();
@@ -7,6 +22,11 @@ define(['pixi.dev', 'far', 'mid'], function(PIXI, Far, Mid) {
     this.mid = new Mid();
     stage.addChild(this.mid);
 
+    this.front = new Walls();
+    stage.addChild(this.front);
+
+    this.mapBuilder = new MapBuilder(this.front);
+
     this.viewportX = 0;
   }
 
@@ -14,6 +34,7 @@ define(['pixi.dev', 'far', 'mid'], function(PIXI, Far, Mid) {
     this.viewportX = viewportX;
     this.far.setViewportX(viewportX);
     this.mid.setViewportX(viewportX);
+    this.front.setViewportX(viewportX);
   };
 
   Scroller.prototype.getViewportX = function() {
