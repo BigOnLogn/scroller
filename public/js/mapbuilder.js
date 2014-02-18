@@ -7,7 +7,9 @@ function(SliceType) {
 
   function MapBuilder(walls) {
     this.walls = walls;
+    this.currentHeight = randInt(1, 3);
     this.createMap();
+
   }
 
   MapBuilder.WALL_HEIGHTS = [
@@ -18,43 +20,53 @@ function(SliceType) {
     , 128 // Highest slice
   ];
 
+  MapBuilder.prototype.genNextSection = function() {
+    var nextHeight = randInt(1, 3)
+      , genStep = randInt(1, 2) === 2
+      , spanLength = randInt(5, 50);
+
+    if (genStep && this.currentHeight > 1) {
+
+      this.createWallSpan(this.currentHeight, 1, true, true);
+      this.addWallStep(this.currentHeight - 2);
+      this.createWallSpan(this.currentHeight - 2, spanLength - 1, true, true);
+      this.currentHeight -= 2;
+
+    } else if (nextHeight !== this.currentHeight) {
+
+      this.addWallBack(this.currentHeight);
+      this.createGap(randInt(1, 3));
+
+      this.createWallSpan(nextHeight, spanLength, false, true);
+      this.currentHeight = nextHeight;
+
+    } else {
+      this.genWallSpan(nextHeight, spanLength, true, true);
+    }
+  };
+
+  MapBuilder.prototype.genWallSpan = function(heightIndex, spanLength) {
+    var insertGap = randInt(1, 10) === 5;
+    if (insertGap) {
+      var firstSpan = Math.floor(spanLength / randInt(1, 3))
+        , secondSpan = spanLength - firstSpan;
+      this.createWallSpan(heightIndex, firstSpan, true);
+      this.createGap(randInt(1, 3));
+      this.createWallSpan(heightIndex, secondSpan, false, true);
+    } else {
+      this.createWallSpan(heightIndex, spanLength, true, true);
+    }
+  };
+
   MapBuilder.prototype.createMap = function() {
-    this.createWallSpan(3, 9, true);
-    this.createGap(1);
-    this.createWallSpan(1, 30);
-    this.createGap(1);
-    this.createWallSpan(2, 18);
-    this.createGap(1);
-    this.createSteppedWallSpan(2, 5, 28);
-  this.createGap(1);
-  this.createWallSpan(1, 10);
-  this.createGap(1);
-  this.createWallSpan(2, 6); 
-  this.createGap(1);
-  this.createWallSpan(1, 8);
-  this.createGap(1);
-  this.createWallSpan(2, 6);
-  this.createGap(1);
-  this.createWallSpan(1, 8);
-  this.createGap(1)
-  this.createWallSpan(2, 7);
-  this.createGap(1);
-  this.createWallSpan(1, 16);
-  this.createGap(1);
-  this.createWallSpan(2, 6);
-  this.createGap(1);
-  this.createWallSpan(1, 22);
-  this.createGap(2);
-  this.createWallSpan(2, 14);
-  this.createGap(2);
-  this.createWallSpan(3, 8);
-  this.createGap(2);
-  this.createSteppedWallSpan(3, 5, 12);
-  this.createGap(3);
-  this.createWallSpan(0, 8);
-  this.createGap(3);
-  this.createWallSpan(1, 50);
-  this.createGap(20);
+    this.createWallSpan(this.currentHeight, 9, true);
+    this.createGap(2);
+    this.createWallSpan(this.currentHeight, 1, false, true);
+    for (var i = 0; i < 20; i++) {
+      this.genNextSection();
+    }
+    this.createWallSpan(this.currentHeight, 1, true);
+    this.createGap(20);
   };
 
   MapBuilder.prototype.createGap = function(spanLength) {
@@ -118,6 +130,14 @@ function(SliceType) {
     var y = MapBuilder.WALL_HEIGHTS[heightIndex];
     this.walls.addSlice(SliceType.STEP, y);
   };
+
+  function randInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  function rand(min, max) {
+    return Math.random() * (max - min) + min;
+  }
 
   return MapBuilder;
 })
