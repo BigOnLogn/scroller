@@ -17,8 +17,8 @@ function(PIXI, Scroller) {
   }
 
   Main.MIN_SCROLL_SPEED = 2;
-  Main.MAX_SCROLL_SPEED = 30;
-  Main.SCROLL_ACCELERATION = 0.05;
+  Main.MAX_SCROLL_SPEED = 15;
+  Main.SCROLL_ACCELERATION = 0.005;
 
   Main.prototype.begin = function() {
     this.loadSpriteSheet();
