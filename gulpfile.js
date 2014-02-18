@@ -12,7 +12,7 @@ var paths = {
   ,styles: ['libs/**/*.css', 'public/css/**/*.css']
   ,assets: ['public/assets/*']
   ,main: ['public/index.html']
-  ,server: ['./server.js']
+  ,server: ['./server.js', './Procfile', './package.json']
 };
 
 gulp.task('default', ['clean'], function() {
@@ -20,7 +20,7 @@ gulp.task('default', ['clean'], function() {
 });
 
 gulp.task('server', ['scripts', 'styles', 'assets', 'main'], function() {
-  return gulp.src('./server.js')
+  return gulp.src(paths.server)
     .pipe(gulp.dest('dist'));
 });
 
